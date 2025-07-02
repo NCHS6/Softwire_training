@@ -1,45 +1,75 @@
 package com.example.fizzbuzz
+import androidx.core.util.rangeTo
 import java.util.Scanner
 
 fun main() { //change to commit
-    print("Enter max number: ")
+
+
     val scanner = Scanner(System.`in`)
-    val max: Int = scanner.nextLine().toInt()
+    var max : Int = 0
+
+    while (max <= 0) {
+        print("Enter max number: ")
+        val maxStr: String = scanner.nextLine()
+        try {
+            max = maxStr.toInt()
+            if (max < 1) {
+                throw Exception("Negative Number")
+            }
+        } catch(e: Exception) {
+            println(e)
+            println("Please enter valid numerical values")
+        }
+    }
+
+
+
     print("Enter rule numbers separated with a space: ")
     val rules = scanner.nextLine().split(' ')
+
     (1..max).forEach {  num ->
-        var outString: String = ""
+        //var outArr = emptyArray<String>().toMutableList()
+        val outArr = ArrayList<String>()
         if (num % 3 == 0 && "3" in rules) {
-            outString += "Fizz"
+            outArr.add("Fizz")
         }
         if (num % 5 == 0 && "5" in rules) {
-            outString += "Buzz"
+            outArr.add("Buzz")
         }
         if (num % 7 == 0 && "7" in rules) {
-            outString += "Bang"
+            outArr.add("Bang")
         }
         if (num % 11 == 0 && "11" in rules) {
-            outString = "Bong"
+            outArr.clear()
+            outArr.add("Bong")
         }
         if (num % 13 == 0 && "13" in rules) {
-            val bIndex:Int = outString.indexOf('B')
-            if (bIndex == -1) {
-                outString += "Fezz"
+            if (outArr.size == 0) {
+                outArr.add("Fezz")
             } else {
-                outString = outString.subSequence(0,bIndex).toString() + "Fezz" + outString.substring(bIndex)
+                for (index in outArr.indices) {
+                    if (outArr[index][0] == 'B') {
+                        outArr.add(index, "Fezz")
+                    } else if (index == outArr.lastIndex) {
+                        outArr.add("Fezz")
+                    }
+                }
             }
-
         }
+
         if (num % 17 == 0 && "17" in rules) {
-            val reversed = outString.chunked(4).reversed()
-            outString = reversed.joinToString(separator = "")
+            outArr.reverse()
         }
 
-        if (outString == "") {
+        val outString : String
+
+        if (outArr.size == 0) {
             outString = num.toString()
+        } else {
+            outString = outArr.joinToString(separator = "")
         }
 
-        print("\n" + outString)
+        println(outString)
     }
 
 
